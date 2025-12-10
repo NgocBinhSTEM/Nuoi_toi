@@ -1,1 +1,745 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nuôi Tôi</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #d9ffe2 0, #9de8b5 40%, #4caf50 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      color: #222;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      margin: 16px;
+      background: #f7fff9;
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(0, 80, 20, 0.35);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-inner {
+      padding: 16px 16px 24px;
+      overflow-y: auto;
+      max-height: calc(100vh - 32px);
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #3ddc84, #8cf5b8);
+      border-radius: 20px;
+      padding: 18px 16px 22px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      box-shadow: 0 10px 24px rgba(0, 120, 60, 0.4);
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #3ddc84;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .title-main {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.19);
+      padding: 8px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-top: 4px;
+      backdrop-filter: blur(6px);
+    }
+
+    .lang-switch {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .lang-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.55);
+      color: #06642e;
+      transition: all 0.15s ease;
+    }
+
+    .lang-btn.active {
+      background: #06642e;
+      color: #fff;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.65);
+    }
+
+    /* Sections & cards */
+    .section-title {
+      margin: 20px 4px 10px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0b7a3d;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title span.emoji {
+      font-size: 18px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      margin: 8px 0;
+      box-shadow: 0 10px 18px rgba(15, 110, 40, 0.12);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .card-icon {
+      font-size: 22px;
+    }
+
+    .card-title {
+      font-weight: 800;
+      font-size: 16px;
+      color: #5c2c86;
+    }
+
+    .card-text {
+      margin-top: 4px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #444;
+    }
+
+    .list {
+      list-style: none;
+      margin-top: 6px;
+    }
+
+    .list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 14px;
+    }
+
+    .list li .bullet {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    /* Comparison */
+    .comparison-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (min-width: 480px) {
+      .comparison-row {
+        flex-direction: row;
+      }
+    }
+
+    .card.bad {
+      border-left: 4px solid #ff4b5c;
+    }
+
+    .card.good {
+      border-left: 4px solid #00b86c;
+    }
+
+    .card.bad .card-title {
+      color: #d6001c;
+    }
+
+    .card.good .card-title {
+      color: #047a3d;
+    }
+
+    /* Donate card */
+    .donate-card {
+      background: linear-gradient(135deg, #ffeb99, #ffc6a5);
+      border-radius: 20px;
+      margin: 18px 0 6px;
+      padding: 16px 14px 18px;
+      text-align: center;
+      box-shadow: 0 12px 24px rgba(204, 120, 0, 0.35);
+    }
+
+    .donate-title {
+      font-weight: 900;
+      font-size: 17px;
+      margin-bottom: 8px;
+      color: #9b4300;
+    }
+
+    .donate-text {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .btn-donate {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff5722, #ff9800);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 10px 18px rgba(183, 81, 0, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn-donate:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 5px 10px rgba(183, 81, 0, 0.4);
+    }
+
+    footer {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 11px;
+      color: #225c3b;
+      opacity: 0.8;
+    }
+
+    /* Donate overlay + “hiệu ứng rực rỡ” */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .overlay.active {
+      display: flex;
+      pointer-events: auto;
+    }
+
+    .overlay-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, #ffffff 0, #ffe082 20%, #ff8a65 45%, #ff5252 65%, #6a1b9a 100%);
+      opacity: 0.95;
+      animation: bgPulse 3s linear infinite alternate;
+    }
+
+    @keyframes bgPulse {
+      0% {
+        filter: hue-rotate(0deg) saturate(1);
+      }
+      50% {
+        filter: hue-rotate(60deg) saturate(1.3);
+      }
+      100% {
+        filter: hue-rotate(120deg) saturate(1.6);
+      }
+    }
+
+    .overlay-content {
+      position: relative;
+      max-width: 360px;
+      margin: 0 16px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 26px;
+      padding: 22px 18px 18px;
+      text-align: center;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+
+    .overlay-title {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ff5722, #e91e63, #9c27b0);
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: titleGlow 1.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      0% {
+        text-shadow: 0 0 6px rgba(255, 87, 34, 0.8);
+      }
+      100% {
+        text-shadow: 0 0 14px rgba(156, 39, 176, 1);
+      }
+    }
+
+    .overlay-message {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    .overlay-close {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #4caf50;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(0, 120, 60, 0.45);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .overlay-close:active {
+      transform: translateY(1px) scale(0.97);
+      box-shadow: 0 4px 9px rgba(0, 120, 60, 0.4);
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff 0, #ffeb3b 40%, transparent 70%);
+      opacity: 0.9;
+      animation: sparkle 1.2s linear infinite;
+      pointer-events: none;
+    }
+
+    .sparkle:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+    .sparkle:nth-child(2) { top: 18%; right: 18%; animation-delay: 0.2s; }
+    .sparkle:nth-child(3) { bottom: 18%; left: 16%; animation-delay: 0.4s; }
+    .sparkle:nth-child(4) { bottom: 10%; right: 22%; animation-delay: 0.6s; }
+    .sparkle:nth-child(5) { top: 50%; left: 4%; animation-delay: 0.8s; }
+    .sparkle:nth-child(6) { top: 45%; right: 6%; animation-delay: 1s; }
+
+    @keyframes sparkle {
+      0% {
+        transform: scale(0.4) translateY(0);
+        opacity: 0;
+      }
+      40% {
+        transform: scale(1) translateY(-6px);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.2) translateY(-14px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="app-inner">
+      <!-- Header -->
+      <header class="header">
+<div class="logo">
+  <img src="me_icon.png" alt="Logo" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+</div>
+
+        <div class="lang-switch">
+          <button class="lang-btn active" data-lang="vi">VI</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+        <div class="title-main" id="title-main">NUÔI TÔI</div>
+        <div class="subtitle" id="subtitle">Hãy nuôi tôi. Tôi hứa sao kê đầy đủ! 💯</div>
+      </header>
+
+      <!-- Why section -->
+      <h2 class="section-title">
+        <span class="emoji">🎯</span>
+        <span id="why-title">Tại sao nên nuôi tôi?</span>
+      </h2>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📊</div>
+          <div class="card-title" id="realtime-title">Sao kê realtime</div>
+        </div>
+        <p class="card-text" id="realtime-text">
+          Cập nhật từng giây! Còn nhanh hơn cả tốc độ bạn chuyển tiền.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🔍</div>
+          <div class="card-title" id="transparent-title">Minh bạch 300%</div>
+        </div>
+        <p class="card-text" id="transparent-text">
+          Hơn cả 100%! Tôi còn báo cáo cả việc mua ly trà sữa nhỏ xíu nhất.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📱</div>
+          <div class="card-title" id="app-track-title">App tracking</div>
+        </div>
+        <p class="card-text" id="app-track-text">
+          Theo dõi 24/7 tôi ăn gì, uống gì, đi đâu. Như một “Big Brother” xanh lá đáng yêu.
+        </p>
+      </div>
+
+      <!-- Commitments -->
+      <h2 class="section-title">
+        <span class="emoji">🏆</span>
+        <span id="commit-title">Cam kết vàng của tôi</span>
+      </h2>
+
+      <div class="card">
+        <ul class="list">
+          <li>
+            <span class="bullet">✅</span>
+            <span id="commit-1">
+              Sao kê mỗi ngày: cập nhật lúc 6h sáng, đều như vắt chanh (kể cả Chủ Nhật & Lễ).
+            </span>
+          </li>
+          <li>
+            <span class="bullet">✅</span>
+            <span id="commit-2">
+              Không giấu giếm: từ tô phở 50k đến hộp sữa chua 8k đều được ghi chép tỉ mỉ.
+            </span>
+          </li>
+          <li>
+            <span class="bullet">✅</span>
+            <span id="commit-3">
+              Có hóa đơn chứng từ: chụp bill, quét mã vạch, lưu biên lai đầy đủ.
+            </span>
+          </li>
+          <li>
+            <span class="bullet">✅</span>
+            <span id="commit-4">
+              Video unboxing: mở từng gói mì tôm livestream cho bạn xem cho đã.
+            </span>
+          </li>
+          <li>
+            <span class="bullet">✅</span>
+            <span id="commit-5">
+              Hotline 24/7: gọi hỏi tôi ăn gì bất cứ lúc nào, kể cả 3 giờ sáng.
+            </span>
+          </li>
+          <li>
+            <span class="bullet">✅</span>
+            <span id="commit-6">
+              Không block: hỏi khó đến mấy vẫn trả lời, không có kiểu “đã xem” rồi im lặng.
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Comparison -->
+      <h2 class="section-title">
+        <span class="emoji">💸</span>
+        <span id="compare-title">So sánh với “người khác”</span>
+      </h2>
+
+      <div class="comparison-row">
+        <div class="card bad">
+          <div class="card-title" id="other-title">Người khác</div>
+          <ul class="list">
+            <li>
+              <span class="bullet">❌</span>
+              <span id="other-1">
+                Sao kê sau 3 năm (hoặc không bao giờ).
+              </span>
+            </li>
+            <li>
+              <span class="bullet">❌</span>
+              <span id="other-2">
+                File Excel blur mờ như… ảnh mờ.
+              </span>
+            </li>
+            <li>
+              <span class="bullet">❌</span>
+              <span id="other-3">
+                Số liệu “làm tròn” theo kiểu 1 + 1 = 3.
+              </span>
+            </li>
+            <li>
+              <span class="bullet">❌</span>
+              <span id="other-4">
+                Block người hỏi nhanh như chớp.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card good">
+          <div class="card-title" id="me-title">Nuôi tôi</div>
+          <ul class="list">
+            <li>
+              <span class="bullet">✅</span>
+              <span id="me-1">
+                Sao kê trước khi tiêu (để bạn duyệt trước).
+              </span>
+            </li>
+            <li>
+              <span class="bullet">✅</span>
+              <span id="me-2">
+                File Excel 4K Ultra HD, có chữ ký điện tử đàng hoàng.
+              </span>
+            </li>
+            <li>
+              <span class="bullet">✅</span>
+              <span id="me-3">
+                Số liệu chính xác đến từng đồng.
+              </span>
+            </li>
+            <li>
+              <span class="bullet">✅</span>
+              <span id="me-4">
+                Trả lời inbox nhanh hơn cả chatbot.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Donate -->
+      <div class="donate-card">
+        <div class="donate-title" id="donate-title">
+          = DONATE NGAY ĐI, NẾU BẠN ĐÃ CƯỜI! =
+        </div>
+        <p class="donate-text" id="donate-text">
+          Không cần phải là “đại gia”. Một nụ cười & một cú click là đủ rồi.
+        </p>
+        <button class="btn-donate" id="btn-donate">Donate</button>
+      </div>
+
+      <footer id="footer-text">
+        Made with 💚 – Nuôi tôi, nhưng sao kê vẫn xanh.
+      </footer>
+    </div>
+  </div>
+
+  <!-- Overlay donate -->
+  <div class="overlay" id="overlay">
+    <div class="overlay-bg"></div>
+    <div class="overlay-content">
+      <!-- sparkles -->
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+
+      <div class="overlay-title" id="overlay-title">
+        Cảm ơn bạn rất nhiều! ✨
+      </div>
+      <div class="overlay-message" id="overlay-message">
+        Chân thành cảm ơn bạn, donate một nụ cười là được rồi.
+        Chúc bạn và gia đình luôn mạnh khỏe, hạnh phúc và thành công!
+      </div>
+      <button class="overlay-close" id="overlay-close">
+        Đóng / Close
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      vi: {
+        "title-main": "NUÔI TÔI",
+        "subtitle": "Hãy nuôi tôi. Tôi hứa sao kê đầy đủ! 💯",
+        "why-title": "Tại sao nên nuôi tôi?",
+        "realtime-title": "Sao kê realtime",
+        "realtime-text":
+          "Cập nhật từng giây! Còn nhanh hơn cả tốc độ bạn chuyển tiền.",
+        "transparent-title": "Minh bạch 300%",
+        "transparent-text":
+          "Hơn cả 100%! Tôi còn báo cáo cả việc mua ly trà sữa nhỏ xíu nhất.",
+        "app-track-title": "App tracking",
+        "app-track-text":
+          "Theo dõi 24/7 tôi ăn gì, uống gì, đi đâu. Như một “Big Brother” xanh lá đáng yêu.",
+        "commit-title": "Cam kết vàng của tôi",
+        "commit-1":
+          "Sao kê mỗi ngày: cập nhật lúc 6h sáng, đều như vắt chanh (kể cả Chủ Nhật & Lễ).",
+        "commit-2":
+          "Không giấu giếm: từ tô phở 50k đến hộp sữa chua 8k đều được ghi chép tỉ mỉ.",
+        "commit-3":
+          "Có hóa đơn chứng từ: chụp bill, quét mã vạch, lưu biên lai đầy đủ.",
+        "commit-4":
+          "Video unboxing: mở từng gói mì tôm livestream cho bạn xem cho đã.",
+        "commit-5":
+          "Hotline 24/7: gọi hỏi tôi ăn gì bất cứ lúc nào, kể cả 3 giờ sáng.",
+        "commit-6":
+          "Không block: hỏi khó đến mấy vẫn trả lời, không có kiểu “đã xem” rồi im lặng.",
+        "compare-title": "So sánh với “người khác”",
+        "other-title": "Người khác",
+        "other-1": "Sao kê sau 3 năm (hoặc không bao giờ).",
+        "other-2": "File Excel blur mờ như… ảnh mờ.",
+        "other-3": "Số liệu “làm tròn” theo kiểu 1 + 1 = 3.",
+        "other-4": "Block người hỏi nhanh như chớp.",
+        "me-title": "Nuôi tôi",
+        "me-1": "Sao kê trước khi tiêu (để bạn duyệt trước).",
+        "me-2": "File Excel 4K Ultra HD, có chữ ký điện tử đàng hoàng.",
+        "me-3": "Số liệu chính xác đến từng đồng.",
+        "me-4": "Trả lời inbox nhanh hơn cả chatbot.",
+        "donate-title": "= DONATE NGAY ĐI, NẾU BẠN ĐÃ CƯỜI! =",
+        "donate-text":
+          "Không cần phải là “đại gia”. Một nụ cười & một cú click là đủ rồi.",
+        "footer-text": "Made with 💚 – Nuôi tôi, nhưng sao kê vẫn xanh.",
+        "overlay-title": "Cảm ơn bạn rất nhiều! ✨",
+        "overlay-message":
+          "Chân thành cảm ơn bạn, donate một nụ cười là được rồi. Chúc bạn và gia đình luôn mạnh khỏe, hạnh phúc và thành công!",
+        "btn-donate": "Donate",
+        "overlay-close": "Đóng / Close",
+      },
+      en: {
+        "title-main": "SPONSOR ME",
+        "subtitle": "Let me live on your budget – I’ll show every single receipt! 💯",
+        "why-title": "Why should you sponsor me?",
+        "realtime-title": "Realtime statements",
+        "realtime-text":
+          "Updated every second – faster than your bank transfer speed.",
+        "transparent-title": "300% transparency",
+        "transparent-text":
+          "More than 100%! I even log the tiniest milk-tea cup I buy.",
+        "app-track-title": "App tracking",
+        "app-track-text":
+          "24/7 log of what I eat, drink and where I go. A cute green “Big Brother”.",
+        "commit-title": "My golden commitments",
+        "commit-1":
+          "Daily report: refreshed at 6 a.m. sharp, including Sundays & holidays.",
+        "commit-2":
+          "No hiding: from a 50k bowl of noodles to an 8k yogurt cup – all recorded.",
+        "commit-3":
+          "Full proof: bills, barcodes and receipts are photographed and stored.",
+        "commit-4":
+          "Live unboxing: every instant-noodle pack can be opened on livestream for you.",
+        "commit-5":
+          "Hotline 24/7: ask what I ate anytime, even at 3 a.m.",
+        "commit-6":
+          "No blocking: tough questions still get answered – no ghosting, no “seen-only”.",
+        "compare-title": "Compared with “other people”",
+        "other-title": "Others",
+        "other-1": "Statements after 3 years (or never).",
+        "other-2": "Excel files so blurry they look like screenshots.",
+        "other-3": "Numbers “rounded” so that 1 + 1 = 3.",
+        "other-4": "Block you at the speed of light.",
+        "me-title": "Me",
+        "me-1": "Report before spending (you approve first).",
+        "me-2": "Excel in 4K Ultra HD with digital signatures.",
+        "me-3": "Accuracy down to each single đồng.",
+        "me-4": "Replies to inbox faster than most chatbots.",
+        "donate-title": "= DONATE NOW IF I MADE YOU SMILE! =",
+        "donate-text":
+          "You don’t need to be rich. One smile and one click are more than enough.",
+        "footer-text": "Made with 💚 – Sponsor me, but the reports stay green.",
+        "overlay-title": "Thank you so much! ✨",
+        "overlay-message":
+          "Thank you from the bottom of my heart – a smile from you is the best donation. Wishing you and your family health, happiness and great success!",
+        "btn-donate": "Donate",
+        "overlay-close": "Close",
+      },
+    };
+
+    let currentLang = "vi";
+
+    function applyTranslations(lang) {
+      currentLang = lang;
+      const map = translations[lang];
+      for (const key in map) {
+        const el = document.getElementById(key);
+        if (el) el.textContent = map[key];
+      }
+
+      // Update html lang attribute
+      document.documentElement.lang = lang;
+
+      // Update active state on buttons
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+    }
+
+    document.querySelectorAll(".lang-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const lang = btn.dataset.lang;
+        if (lang !== currentLang) {
+          applyTranslations(lang);
+        }
+      });
+    });
+
+    // Donate overlay logic
+    const overlay = document.getElementById("overlay");
+    const btnDonate = document.getElementById("btn-donate");
+    const btnClose = document.getElementById("overlay-close");
+
+    btnDonate.addEventListener("click", () => {
+      // ensure overlay message fits current language
+      applyTranslations(currentLang);
+      overlay.classList.add("active");
+    });
+
+    btnClose.addEventListener("click", () => {
+      overlay.classList.remove("active");
+    });
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay || e.target.classList.contains("overlay-bg")) {
+        overlay.classList.remove("active");
+      }
+    });
+
+    // initial language
+    applyTranslations("vi");
+  </script>
+</body>
+</html>
